@@ -3,6 +3,7 @@ import '@polymer/paper-card/paper-card.js';
 import '@polymer/iron-icons/iron-icons.js';
 import '@polymer/paper-button/paper-button.js';
 import '@polymer/paper-input/paper-input.js';
+import './node_modules/rate-component/rate-component.js'
 
 export class DishFormComponent extends LitElement {
     constructor() {
@@ -54,6 +55,19 @@ export class DishFormComponent extends LitElement {
         this.newDish.image = element.value
     };
 
+    __saveDishRate() {
+        const element = this.shadowRoot.querySelector('rate-component')
+        this.newDish.rate = element.rate
+    }
+
+    __saveDish() {
+        this.dispatchEvent(new CustomEvent('new-dish-created', {
+            detail: {
+                newDish: this.newDish
+            }
+        }));
+    }
+
     render() {
         return html `
         <div class="container">
@@ -75,7 +89,7 @@ export class DishFormComponent extends LitElement {
                     <paper-input label="Imagen" id="image" @change="${this.__saveDishImage}">
                         <iron-icon slot="prefix" icon="editor:insert-photo"></iron-icon>
                     </paper-input>
-                    <rate-component></rate-component>
+                    <rate-component rate="3" @rate-changed="${this.__saveDishRate}"></rate-component>
                 </div>
                 <div class="card-actions">
                     <paper-button class="info" on-click="${this.__savedish}">Guardar</paper-button>
